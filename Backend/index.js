@@ -1,3 +1,4 @@
+// index.js
 const express = require("express");
 const cors = require("cors");
 
@@ -7,190 +8,153 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-/*
-  PRODUCT STRUCTURE:
-  - id
-  - name
-  - category
-  - imageUrl
-  - offers[] (price comparison)
-*/
-
+// Hard-coded products with multiple suppliers and images
 const products = [
   {
     id: 1,
-    name: "Nike Air Force 1",
-    category: "Footwear",
-    imageUrl: "https://via.placeholder.com/200?text=Nike+Air+Force+1",
-    offers: [
-      { retailer: "JD Sports", price: 109.99, currency: "EUR" },
-      { retailer: "Lifestyle Sports", price: 114.99, currency: "EUR" },
-      { retailer: "Sports Direct", price: 99.99, currency: "EUR" }
+    name: "Nike Air Max 270",
+    imageUrl: "https://via.placeholder.com/150?text=Nike+Air+Max+270",
+    prices: [
+      { supplier: "JD Sports", price: 120.99, currency: "EUR" },
+      { supplier: "Sports Direct", price: 115.50, currency: "EUR" }
     ]
   },
   {
     id: 2,
-    name: "Adidas Ultraboost 23",
-    category: "Footwear",
-    imageUrl: "https://via.placeholder.com/200?text=Adidas+Ultraboost",
-    offers: [
-      { retailer: "Elverys", price: 189.99, currency: "EUR" },
-      { retailer: "JD Sports", price: 199.99, currency: "EUR" },
-      { retailer: "Amazon", price: 179.99, currency: "EUR" }
+    name: "Adidas Ultraboost",
+    imageUrl: "https://via.placeholder.com/150?text=Adidas+Ultraboost",
+    prices: [
+      { supplier: "Lifestyle Sports", price: 140.00, currency: "EUR" },
+      { supplier: "Elverys", price: 138.50, currency: "EUR" }
     ]
   },
   {
     id: 3,
-    name: "New Balance 550",
-    category: "Footwear",
-    imageUrl: "https://via.placeholder.com/200?text=NB+550",
-    offers: [
-      { retailer: "Lifestyle Sports", price: 139.99, currency: "EUR" },
-      { retailer: "JD Sports", price: 144.99, currency: "EUR" }
+    name: "Smyths LEGO City Set",
+    imageUrl: "https://via.placeholder.com/150?text=LEGO+City",
+    prices: [
+      { supplier: "Smyths", price: 39.99, currency: "EUR" },
+      { supplier: "Amazon", price: 42.50, currency: "EUR" }
     ]
   },
-
-  // ---------- ELECTRONICS ----------
   {
     id: 4,
-    name: "Apple AirPods Pro (2nd Gen)",
-    category: "Electronics",
-    imageUrl: "https://via.placeholder.com/200?text=AirPods+Pro",
-    offers: [
-      { retailer: "Amazon", price: 249.99, currency: "EUR" },
-      { retailer: "Harvey Norman", price: 259.99, currency: "EUR" },
-      { retailer: "Currys", price: 254.99, currency: "EUR" }
+    name: "O'Neill Rash Vest",
+    imageUrl: "https://via.placeholder.com/150?text=O'Neill+Rash+Vest",
+    prices: [
+      { supplier: "O Neill's", price: 34.99, currency: "EUR" },
+      { supplier: "Elverys", price: 32.50, currency: "EUR" }
     ]
   },
   {
     id: 5,
-    name: "Samsung Galaxy Watch 6",
-    category: "Electronics",
-    imageUrl: "https://via.placeholder.com/200?text=Galaxy+Watch+6",
-    offers: [
-      { retailer: "Amazon", price: 329.99, currency: "EUR" },
-      { retailer: "Argos", price: 339.99, currency: "EUR" }
+    name: "Penney's Women's Jacket",
+    imageUrl: "https://via.placeholder.com/150?text=Penney's+Jacket",
+    prices: [
+      { supplier: "Penney's", price: 49.99, currency: "EUR" },
+      { supplier: "Dunnes", price: 52.00, currency: "EUR" }
     ]
   },
   {
     id: 6,
-    name: "Sony WH-1000XM5",
-    category: "Electronics",
-    imageUrl: "https://via.placeholder.com/200?text=Sony+XM5",
-    offers: [
-      { retailer: "Amazon", price: 379.99, currency: "EUR" },
-      { retailer: "Harvey Norman", price: 399.99, currency: "EUR" }
+    name: "Amazon Echo Dot",
+    imageUrl: "https://via.placeholder.com/150?text=Echo+Dot",
+    prices: [
+      { supplier: "Amazon", price: 59.99, currency: "EUR" },
+      { supplier: "Ebay", price: 62.50, currency: "EUR" }
     ]
   },
-
-  // ---------- TOYS ----------
   {
     id: 7,
-    name: "LEGO Star Wars Millennium Falcon",
-    category: "Toys",
-    imageUrl: "https://via.placeholder.com/200?text=LEGO+Falcon",
-    offers: [
-      { retailer: "Smyths", price: 159.99, currency: "EUR" },
-      { retailer: "Amazon", price: 149.99, currency: "EUR" }
+    name: "Thinking Toys Puzzle",
+    imageUrl: "https://via.placeholder.com/150?text=Thinking+Toys+Puzzle",
+    prices: [
+      { supplier: "Thinking Toys", price: 19.99, currency: "EUR" },
+      { supplier: "Amazon", price: 22.50, currency: "EUR" }
     ]
   },
   {
     id: 8,
-    name: "LEGO Harry Potter Hogwarts Castle",
-    category: "Toys",
-    imageUrl: "https://via.placeholder.com/200?text=LEGO+Hogwarts",
-    offers: [
-      { retailer: "Smyths", price: 499.99, currency: "EUR" },
-      { retailer: "Amazon", price: 489.99, currency: "EUR" }
+    name: "Elverys Football",
+    imageUrl: "https://via.placeholder.com/150?text=Elverys+Football",
+    prices: [
+      { supplier: "Elverys", price: 24.99, currency: "EUR" },
+      { supplier: "Sports Direct", price: 22.50, currency: "EUR" }
     ]
   },
   {
     id: 9,
-    name: "Barbie Dreamhouse",
-    category: "Toys",
-    imageUrl: "https://via.placeholder.com/200?text=Barbie+Dreamhouse",
-    offers: [
-      { retailer: "Smyths", price: 179.99, currency: "EUR" },
-      { retailer: "Amazon", price: 169.99, currency: "EUR" }
+    name: "Lifestyle Sports Running Shoes",
+    imageUrl: "https://via.placeholder.com/150?text=Running+Shoes",
+    prices: [
+      { supplier: "Lifestyle Sports", price: 89.99, currency: "EUR" },
+      { supplier: "JD Sports", price: 92.50, currency: "EUR" }
     ]
   },
-
-  // ---------- SPORTS ----------
   {
     id: 10,
-    name: "O’Neills Ireland Home Jersey",
-    category: "Sportswear",
-    imageUrl: "https://via.placeholder.com/200?text=Ireland+Jersey",
-    offers: [
-      { retailer: "O’Neills", price: 75.00, currency: "EUR" },
-      { retailer: "Elverys", price: 79.99, currency: "EUR" }
+    name: "Dunnes Home Bedding Set",
+    imageUrl: "https://via.placeholder.com/150?text=Bedding+Set",
+    prices: [
+      { supplier: "Dunnes", price: 59.99, currency: "EUR" },
+      { supplier: "Penney's", price: 62.50, currency: "EUR" }
     ]
   },
   {
     id: 11,
-    name: "Canterbury Rugby Boots",
-    category: "Sportswear",
-    imageUrl: "https://via.placeholder.com/200?text=Rugby+Boots",
-    offers: [
-      { retailer: "Elverys", price: 119.99, currency: "EUR" },
-      { retailer: "Sports Direct", price: 109.99, currency: "EUR" }
+    name: "Amazon Kindle Paperwhite",
+    imageUrl: "https://via.placeholder.com/150?text=Kindle+Paperwhite",
+    prices: [
+      { supplier: "Amazon", price: 119.99, currency: "EUR" },
+      { supplier: "Ebay", price: 125.00, currency: "EUR" }
     ]
   },
-
-  // ---------- HOME ----------
   {
     id: 12,
-    name: "Dyson V15 Detect",
-    category: "Home",
-    imageUrl: "https://via.placeholder.com/200?text=Dyson+V15",
-    offers: [
-      { retailer: "Harvey Norman", price: 749.99, currency: "EUR" },
-      { retailer: "Amazon", price: 729.99, currency: "EUR" }
+    name: "Smyths Disney Puzzle",
+    imageUrl: "https://via.placeholder.com/150?text=Disney+Puzzle",
+    prices: [
+      { supplier: "Smyths", price: 15.99, currency: "EUR" },
+      { supplier: "Thinking Toys", price: 17.50, currency: "EUR" }
     ]
   },
   {
     id: 13,
-    name: "Nespresso Vertuo Next",
-    category: "Home",
-    imageUrl: "https://via.placeholder.com/200?text=Nespresso",
-    offers: [
-      { retailer: "Currys", price: 139.99, currency: "EUR" },
-      { retailer: "Amazon", price: 129.99, currency: "EUR" }
+    name: "O'Neill Surf Shorts",
+    imageUrl: "https://via.placeholder.com/150?text=Surf+Shorts",
+    prices: [
+      { supplier: "O Neill's", price: 29.99, currency: "EUR" },
+      { supplier: "Elverys", price: 32.50, currency: "EUR" }
     ]
   },
-
-  // ---------- GAMING ----------
   {
     id: 14,
-    name: "PlayStation 5",
-    category: "Gaming",
-    imageUrl: "https://via.placeholder.com/200?text=PS5",
-    offers: [
-      { retailer: "Smyths", price: 549.99, currency: "EUR" },
-      { retailer: "Amazon", price: 539.99, currency: "EUR" }
+    name: "JD Sports Hoodie",
+    imageUrl: "https://via.placeholder.com/150?text=JD+Hoodie",
+    prices: [
+      { supplier: "JD Sports", price: 49.99, currency: "EUR" },
+      { supplier: "Lifestyle Sports", price: 52.50, currency: "EUR" }
     ]
   },
   {
     id: 15,
-    name: "Nintendo Switch OLED",
-    category: "Gaming",
-    imageUrl: "https://via.placeholder.com/200?text=Switch+OLED",
-    offers: [
-      { retailer: "Smyths", price: 349.99, currency: "EUR" },
-      { retailer: "Amazon", price: 339.99, currency: "EUR" }
+    name: "Sports Direct Soccer Ball",
+    imageUrl: "https://via.placeholder.com/150?text=Soccer+Ball",
+    prices: [
+      { supplier: "Sports Direct", price: 21.99, currency: "EUR" },
+      { supplier: "Elverys", price: 23.50, currency: "EUR" }
     ]
   }
 ];
 
-// API ROUTE
+// GET /products - return all products
 app.get("/products", (req, res) => {
   res.json(products);
 });
 
+// Test route
 app.get("/", (req, res) => {
-  res.send("Price Comparison Backend Running ✅");
+  res.send("Backend running 🚀");
 });
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
